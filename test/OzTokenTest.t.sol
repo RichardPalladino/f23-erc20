@@ -28,12 +28,17 @@ contract OzTokenTest is Test {
     }
 
     function testAllowances() public {
+        uint256 initialAllowance = 50 ether;
+        uint256 transferAmnt = 25 ether;
+
         assertEq(ozToken.allowance(alice, bob), 0);
+
         vm.prank(alice);
-        ozToken.approve(bob, 100 ether);
-        assertEq(ozToken.allowance(alice, bob), 100 ether);
+        ozToken.approve(bob, initialAllowance);
+        assertEq(ozToken.allowance(alice, bob), initialAllowance);
+
         vm.prank(bob);
-        ozToken.transferFrom(alice, bob, 100 ether);
-        assertEq(ozToken.allowance(alice, bob), 0);
+        ozToken.transferFrom(alice, bob, transferAmnt);
+        assertEq(ozToken.allowance(alice, bob), initialAllowance - transferAmnt);
     }
 }
